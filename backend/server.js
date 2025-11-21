@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
+import { act } from "react";
 
 dotenv.config();
 
@@ -74,7 +75,33 @@ app.post("/api/ask", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
+app.get("/", (req, res) => {
+  res.send({
+    activeStatus: true,
+    error:false
+  })
+})
 app.listen(PORT, () => {
   console.log(`✅ Backend running on port ${PORT}`);
 });
+import client from "./redisClient.js";
+
+app.get("/test-redis", async (req, res) => {
+  await client.set("name", "prajwal");
+  const value = await client.get("name");
+  res.send({ redisValue: value });
+});
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const MONGODB_URI = process.env.MONGODB_URI;
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
