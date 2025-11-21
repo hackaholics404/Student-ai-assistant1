@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
+import { act } from "react";
 
 dotenv.config();
 
@@ -74,7 +75,12 @@ app.post("/api/ask", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
+app.get("/", (req, res) => {
+  res.send({
+    activeStatus: true,
+    error:false
+  })
+})
 app.listen(PORT, () => {
   console.log(`✅ Backend running on port ${PORT}`);
 });
